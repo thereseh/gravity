@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -10,11 +11,20 @@ public class GameManager : MonoBehaviour
 	static public bool DebuggingMode = false;
 	public bool debuggingMode = false;
 
+	static public Vector3 SpawnPoint;
+
+	public string level;
+	public string levelName;
+
+	static public bool SlowMo = false;
+
 	void Start()
 	{
 		DebuggingMode = debuggingMode;
 		matterDistortions.Add(GameObject.Find("BlackHole").GetComponent<MatterDistort>());
 		playerShip = GameObject.Find("PlayerShip");
+		SpawnPoint = playerShip.transform.position;
+		GameObject.Find("CurrentLevelDisplay").GetComponent<Text>().text = "Level " + level + ": " + levelName;
 	}
 
 	// Every frame
@@ -23,7 +33,8 @@ public class GameManager : MonoBehaviour
 		DebuggingMode = debuggingMode;
 		foreach (MatterDistort distorter in matterDistortions)
 		{
-			/*float xSquared = (distorter.position.x - playerShip.transform.position.x) * (distorter.position.x - playerShip.transform.position.x);
+			/*
+			 * float xSquared = (distorter.position.x - playerShip.transform.position.x) * (distorter.position.x - playerShip.transform.position.x);
 			float ySquared = (distorter.position.y - playerShip.transform.position.y) * (distorter.position.y - playerShip.transform.position.y);
 			float distance = Mathf.Sqrt(xSquared + ySquared);
 			if (distance > 0)
@@ -32,7 +43,8 @@ public class GameManager : MonoBehaviour
 				float moveX = distance * Mathf.Cos(angle);
 				float moveY = distance * Mathf.Sin(angle);
 				playerShip.transform.Translate(new Vector3(moveX * Time.deltaTime, moveY * Time.deltaTime, 0));
-			}*/
+			}
+			*/
 		}
 	}
 }
