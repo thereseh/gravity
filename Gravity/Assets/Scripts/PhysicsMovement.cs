@@ -87,10 +87,11 @@ public class PhysicsMovement : MonoBehaviour
 
 	void OnCollisionEnter(Collision coll)
 	{
+
 		foreach (ContactPoint pt in coll.contacts)
 		{
 			if (GameManager.DebuggingMode)
-				print("Collision at " + pt.point + "  |  Separation: " + pt.separation);
+				//print("Collision at " + pt.point + "  |  Separation: " + pt.separation);
 			AddForce((transform.position - pt.point) * 3f * velocity.magnitude);
 			PlayerHealth.TakeDamage(velocity.magnitude / maxVelocity * 35f);
 		}

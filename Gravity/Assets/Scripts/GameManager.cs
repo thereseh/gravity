@@ -7,7 +7,8 @@ public class GameManager : MonoBehaviour
 {
 	static public List<MatterDistort> matterDistortions = new List<MatterDistort>(); // Black Holes and Dark Matters
 	static public GameObject playerShip;
-
+	public GameObject blackhole;
+	public List<GameObject> blackHoles;
 	static public bool DebuggingMode = false;
 	public bool debuggingMode = false;
 
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
 		matterDistortions.Add(GameObject.Find("BlackHole").GetComponent<MatterDistort>());
 		playerShip = GameObject.Find("PlayerShip");
 		SpawnPoint = playerShip.transform.position;
+		blackHoles = new List<GameObject> ();
 		GameObject.Find("CurrentLevelDisplay").GetComponent<Text>().text = "Level " + level + ": " + levelName;
 	}
 
@@ -46,5 +48,13 @@ public class GameManager : MonoBehaviour
 			}
 			*/
 		}
+	}
+
+	public void BlackHoleCollision(float mass, Vector3 radius, Vector3 pos)
+	{
+		GameObject bHole = Instantiate (blackhole, pos, Quaternion.identity) as GameObject;
+		bHole.transform.localScale = radius;
+		bHole.GetComponent<Rigidbody> ().mass = mass;
+		bHole.GetComponent<Rigidbody> ().drag = mass;
 	}
 }

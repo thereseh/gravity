@@ -5,12 +5,15 @@ using System.Collections.Generic;
 
 public class GravitionalPull : MonoBehaviour {
 	public float range = 10f;
+	GameManager gameManager;
+
 
 	Rigidbody self;
 
 	// Use this for initialization
 	void Start () {
 		self = GetComponent<Rigidbody> ();
+		gameManager = GameObject.Find ("MainCamera").GetComponent<GameManager> ();
 	}
 	
 	// Update is called once per frame
@@ -34,10 +37,27 @@ public class GravitionalPull : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter()
+	void OnCollisionEnter(Collision obj)
 	{
 		print ("On Enter");
-		self.isKinematic = true;
+		if (obj.gameObject.tag == "Blackhole") {
+			float masses = self.mass + obj.gameObject.GetComponent<Rigidbody> ().mass;
+			Vector3 rad1 = gameObject.transform.localScale;
+			Vector3 rad2 = obj.transform.localScale;
+			Vector3 sumRadius = rad1 + rad2;
+			Vector3 pos = Vector3.zero;
+			if (rad1.sqrMagnitude > rad2.sqrMagnitude)
+			{
+				pos = gameObject.transform.position;
+				gameManager.BlackHoleCollision (masses, sumRadius, pos);
+
+			}
+
+			Destroy(obj.gameObject);
+			Destroy(gameObject);
+		} else {
+			self.isKinematic = true;
+		}
 	}
 
 	void OnCollisionExit ()
