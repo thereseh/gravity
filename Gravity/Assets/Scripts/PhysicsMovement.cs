@@ -92,7 +92,7 @@ public class PhysicsMovement : MonoBehaviour
 		{
 			if (GameManager.DebuggingMode)
 				//print("Collision at " + pt.point + "  |  Separation: " + pt.separation);
-			AddForce((transform.position - pt.point) * 3f * velocity.magnitude);
+			AddForce((transform.position - pt.point) * 1.5f * velocity.magnitude);
 			PlayerHealth.TakeDamage(velocity.magnitude / maxVelocity * 35f);
 		}
 	}

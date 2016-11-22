@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 
 public class GravitionalPull : MonoBehaviour {
-	public float range = 10f;
+	public float range;
 	GameManager gameManager;
 
 
