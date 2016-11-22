@@ -3,16 +3,14 @@ using System.Collections;
 
 public class MatterDistort : MonoBehaviour
 {
+    public float maxDistance = 5f;
 	public float mass;
 	public Vector3 position;
-	float eventHorizon = 5f;
 
 	void Start()
 	{
 		// Set this object's position
 		position = transform.position;
-
-		// Calculate the event horizon
 	}
 
 	void Move(Vector3 mv)
@@ -23,6 +21,6 @@ public class MatterDistort : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
-		Gizmos.DrawWireSphere(position, eventHorizon);
+		Gizmos.DrawWireSphere(position, maxDistance);
 	}
 }
