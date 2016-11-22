@@ -40,7 +40,7 @@ public class GravitionalPull : MonoBehaviour {
 	void OnCollisionEnter(Collision obj)
 	{
 		print ("On Enter");
-		if (obj.gameObject.tag == "Blackhole") {
+		if (obj.gameObject.tag == "Blackhole" && gameObject.tag != "PlaceHolder") {
 			float masses = self.mass + obj.gameObject.GetComponent<Rigidbody> ().mass;
 			Vector3 rad1 = gameObject.transform.localScale;
 			Vector3 rad2 = obj.transform.localScale;

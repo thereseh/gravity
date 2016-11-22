@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 	private float radius = 1f;
 	private Vector3 blackHolePos;
 	private GameObject placeHolderBlackHole;
+	bool cancel = false;
 
 	static public bool SlowMo = false;
 
@@ -63,31 +64,44 @@ public class GameManager : MonoBehaviour
 
 			Destroy(placeHolderBlackHole);
 			radius = Mathf.Clamp(radius, 1f, 5f);
-
 			placeHolderBlackHole = Instantiate (blackhole, blackHolePos, Quaternion.identity) as GameObject;
+			placeHolderBlackHole.tag = "PlaceHolder";
 			placeHolderBlackHole.transform.localScale = placeHolderBlackHole.transform.localScale * radius;
 		}
 
 		radius = Mathf.Clamp(radius, 1f, 5f);
 
-
 		if (Input.GetMouseButtonUp (0)) {
-			Destroy(placeHolderBlackHole);
+			if (placeHolderBlackHole != null)
+			{
+				Destroy(placeHolderBlackHole);
+			}
+			for(int i = 0; i < blackHoles.Count; i++)
+			{
+				Vector3 distance = blackHoles[i].transform.position - blackHolePos;
+				float mag = distance.magnitude;
+				if (mag <= blackHoles[i].transform.localScale.x + radius)
+				{
+					cancel = true;
+				}
+			}
+
+			if (!cancel) {
 			radius = Mathf.Clamp(radius, 1f, 5f);
 
 			blackHolePos.z = 0f;
 			GameObject copy = Instantiate (blackhole, blackHolePos, Quaternion.identity) as GameObject;
 			copy.transform.localScale = copy.transform.localScale * radius;
 			copy.GetComponent<Rigidbody>().mass = radius * 5;
-			copy.GetComponent<Rigidbody>().drag = radius * 3;
-			copy.GetComponent<GravitionalPull>().range = radius + 3f;
+			copy.GetComponent<Rigidbody>().drag = radius * 2;
+			copy.GetComponent<GravitionalPull>().range = radius + 5f;
+			copy.tag = "Blackhole";
 			blackHoles.Add(copy);
-			radius = 1;
+			}
+			radius = 1f;
+			cancel = false;
 
 		}
-
-
-
 	}
 
 	public void BlackHoleCollision(float mass, Vector3 radius, Vector3 pos)
