@@ -5,13 +5,11 @@ public class ShipMovement : MonoBehaviour
 {
     public Vector3 initialVelocity;
     public float mass;
-    Vector3 acceleration = Vector3.zero;
-    Vector3 velocity = Vector3.zero;
-    //CharacterController controller;
+    [HideInInspector]
+    public Vector3 acceleration = Vector3.zero;
 
 	void Start()
     {
-        //controller = GetComponent<CharacterController>();
         GetComponent<Rigidbody>().velocity = initialVelocity;
     }
 	
@@ -29,28 +27,31 @@ public class ShipMovement : MonoBehaviour
             ApplyForce(-Vector3.up * userInputMultiplier);
 
         // Adjust position
-        //velocity += acceleration * Time.deltaTime;
-        //controller.Move(velocity * Time.deltaTime);
         GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
         acceleration = Vector3.zero;
 
         // Look in the direction of movement
-        //Vector3 normalizedDirection = velocity.normalized;
-        Vector3 normalizedDirection = GetComponent<Rigidbody>().velocity.normalized;
-        if (GetComponent<Rigidbody>().velocity == Vector3.zero)
+        Vector3 v = GetComponent<Rigidbody>().velocity;
+        Vector3 normalizedDirection = v.normalized;
+        if (v == Vector3.zero)
             normalizedDirection = Vector3.one;
         float rotationAngle = Vector3.Angle(Vector3.right, normalizedDirection);
-        if (GetComponent<Rigidbody>().velocity.y > 0)
+        if (v.y > 0)
             rotationAngle = 180 - rotationAngle + 180;
-        if (GetComponent<Rigidbody>().velocity.magnitude == 0)
+        if (v.magnitude == 0)
             rotationAngle = 0;
 
-        transform.GetChild(0).LookAt(transform.GetChild(0).position - Vector3.forward);
+        transform.GetChild(0).LookAt(transform.GetChild(0).position + Vector3.up);
         transform.GetChild(0).RotateAround(transform.GetChild(0).position, -Vector3.forward, rotationAngle);
     }
 
     void ApplyForce(Vector3 force)
     {
         acceleration += force / mass;
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        print("Collided with " + col.gameObject.name);
     }
 }

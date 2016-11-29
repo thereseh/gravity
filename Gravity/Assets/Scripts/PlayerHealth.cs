@@ -10,7 +10,7 @@ public class PlayerHealth : MonoBehaviour
 	void Update()
 	{
 		// Start smoking
-		ParticleSystem smoking = transform.GetChild(0).GetChild(0).Find("SmokingParticleSystem").GetComponent<ParticleSystem>();
+		ParticleSystem smoking = transform.GetChild(0).Find("SmokingParticleSystem").GetComponent<ParticleSystem>();
 		if (health <= 50 && !smoking.isPlaying)
 			smoking.Play();
 	
@@ -42,9 +42,8 @@ public class PlayerHealth : MonoBehaviour
 		Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.Grayscale>().enabled = false;
 		Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>().enabled = false;
 		transform.position = GameManager.SpawnPoint;
-		GetComponent<PhysicsMovement>().velocity = Vector3.zero;
-		GetComponent<PhysicsMovement>().acceleration = Vector3.zero;
-		GetComponent<PhysicsMovement>().AddForce(GetComponent<PhysicsMovement>().initialImpulse);
+		GetComponent<ShipMovement>().acceleration = Vector3.zero;
+        GetComponent<Rigidbody>().velocity = GetComponent<ShipMovement>().initialVelocity;
 		transform.GetChild(0).GetChild(0).Find("SmokingParticleSystem").GetComponent<ParticleSystem>().Stop();
 		TakeDamage(0f);
 		transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
