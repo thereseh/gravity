@@ -6,11 +6,11 @@ public class ShipMovement : MonoBehaviour
     public float mass;
     Vector3 acceleration = Vector3.zero;
     Vector3 velocity = Vector3.zero;
-    CharacterController controller;
+    //CharacterController controller;
 
 	void Start()
     {
-        controller = GetComponent<CharacterController>();
+        //controller = GetComponent<CharacterController>();
 	}
 	
 	void Update()
@@ -25,35 +25,22 @@ public class ShipMovement : MonoBehaviour
             ApplyForce(Vector3.up * userInputMultiplier);
         if (Input.GetKey(KeyCode.S))
             ApplyForce(-Vector3.up * userInputMultiplier);
-        
-        /* Apply black hole gravity
-        foreach (MatterDistort distorter in GameManager.matterDistortions)
-        {
-            if (distorter == null) continue;
-            Vector3 difference = distorter.transform.position;
-            if (difference.magnitude <= distorter.maxDistance)
-            {
-                // Seek black hole
-                Vector3 desiredVelocity = difference * (1 - (difference.magnitude / distorter.maxDistance));
-                print(desiredVelocity);
-                Vector3 seekForce = desiredVelocity - velocity;
-                ApplyForce(seekForce * userInputMultiplier);
-            }
-        }*/
 
         // Adjust position
-        velocity += acceleration * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        //velocity += acceleration * Time.deltaTime;
+        //controller.Move(velocity * Time.deltaTime);
+        GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
         acceleration = Vector3.zero;
 
         // Look in the direction of movement
-        Vector3 normalizedDirection = velocity.normalized;
-        if (velocity == Vector3.zero)
+        //Vector3 normalizedDirection = velocity.normalized;
+        Vector3 normalizedDirection = GetComponent<Rigidbody>().velocity.normalized;
+        if (GetComponent<Rigidbody>().velocity == Vector3.zero)
             normalizedDirection = Vector3.one;
         float rotationAngle = Vector3.Angle(Vector3.right, normalizedDirection);
-        if (velocity.y > 0)
+        if (GetComponent<Rigidbody>().velocity.y > 0)
             rotationAngle = 180 - rotationAngle + 180;
-        if (velocity.magnitude == 0)
+        if (GetComponent<Rigidbody>().velocity.magnitude == 0)
             rotationAngle = 0;
 
         transform.GetChild(0).LookAt(transform.GetChild(0).position - Vector3.forward);

@@ -6,23 +6,25 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
 	static public GameObject playerShip;
-	public GameObject blackhole;
+    static public List<GameObject> blackHoles = new List<GameObject>();
 
-	public List<GameObject> blackHoles;
+    static public bool DebuggingMode = false;
+    public bool debuggingMode = false;
 
-	static public bool DebuggingMode = false;
-	public bool debuggingMode = false;
+    static public Vector3 SpawnPoint;
 
-	static public Vector3 SpawnPoint;
+    public GameObject blackholePrefab;
 
 	public string level;
 	public string levelName;
-	private float radius = 0.5f;
-	private Vector3 blackHolePos;
-	private GameObject placeHolderBlackHole;
-	bool cancel = false;
 
-	static public bool SlowMo = false;
+    public LayerMask placeholderMask;
+
+    private float placeholderRadius = 0.5f;
+	private GameObject placeHolderBlackHole;
+    private Vector3 defaultPlaceholderScale;
+
+    static public bool SlowMo = false;
 
 	void Start()
 	{
@@ -32,56 +34,91 @@ public class GameManager : MonoBehaviour
 		GameObject.Find("CurrentLevelDisplay").GetComponent<Text>().text = "Level " + level + ": " + levelName;
 	}
 
-	// Every frame
-	void Update()
-	{
+    // Every frame
+    void Update()
+    {
         // Toggle debugging mode in the editor
-		DebuggingMode = debuggingMode;
+        DebuggingMode = debuggingMode;
 
-		if (Input.GetMouseButton(0)) {
-			blackHolePos = Camera.main.ScreenToWorldPoint (new Vector3 (Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-			radius += 0.01f;
+        // Placing new matter distortions
+        PlaceBlackHoles();
+    }
 
-			Destroy(placeHolderBlackHole);
-			radius = Mathf.Clamp(radius, 0.5f, 5f);
-			placeHolderBlackHole = Instantiate (blackhole, blackHolePos, Quaternion.identity) as GameObject;
-			placeHolderBlackHole.tag = "PlaceHolder";
-			placeHolderBlackHole.transform.localScale = placeHolderBlackHole.transform.localScale * radius;
-		}
+    void PlaceBlackHoles()
+    {
+        // Mouse button gets pressed, start making new black hole
+		if (Input.GetMouseButtonDown(0) && placeHolderBlackHole == null)
+        {
+			Vector3 newBlackHolePos = Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.mousePosition.x,
+                Input.mousePosition.y,
+                10.0f
+            ));
+            newBlackHolePos = new Vector3(
+                newBlackHolePos.x,
+                newBlackHolePos.y,
+                0f // Keep on the default X-Y plane
+            );
 
-		radius = Mathf.Clamp(radius, 0.5f, 5f);
+            placeHolderBlackHole = Instantiate(blackholePrefab, newBlackHolePos, Quaternion.identity) as GameObject;
+            defaultPlaceholderScale = placeHolderBlackHole.transform.localScale;
+            placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
+        }
 
-		if (Input.GetMouseButtonUp (0)) {
-			if (placeHolderBlackHole != null)
+        // Increase size of new black hole while mouse button is held down
+        else if (Input.GetMouseButton(0) && placeHolderBlackHole != null)
+        {
+            placeholderRadius += 0.01f;
+            placeholderRadius = Mathf.Clamp(placeholderRadius, 0.5f, 5f);
+            placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
+
+            Vector3 newBlackHolePos = Camera.main.ScreenToWorldPoint(new Vector3(
+                Input.mousePosition.x,
+                Input.mousePosition.y,
+                10.0f
+            ));
+            newBlackHolePos = new Vector3(
+                newBlackHolePos.x,
+                newBlackHolePos.y,
+                0f // Keep on the default X-Y plane
+            );
+            placeHolderBlackHole.transform.position = newBlackHolePos;
+        }
+
+        // Let go of mouse button to place new black hole
+        else if (Input.GetMouseButtonUp(0) && placeHolderBlackHole != null)
+        {
+            bool tooCloseToAnotherBlackhole = false;
+
+			for (int i = 0; i < blackHoles.Count; i++)
 			{
-				Destroy(placeHolderBlackHole);
-			}
-			for(int i = 0; i < blackHoles.Count; i++)
-			{
-				Vector3 distance = blackHoles[i].transform.position - blackHolePos;
+				Vector3 distance = blackHoles[i].transform.position - placeHolderBlackHole.transform.position;
 				float mag = distance.magnitude;
-				print ("mag: " + mag);
-				print ("x + rad: " + (blackHoles[i].transform.localScale.x + radius));
-				if (mag <= (blackHoles[i].transform.localScale.x + radius)/2f)
-				{
-					cancel = true;
-				}
+				//print ("mag: " + mag);
+				//print ("x + rad: " + (blackHoles[i].transform.localScale.x + radius));
+				if (mag <= (blackHoles[i].transform.localScale.x + placeholderRadius) / 2f)
+                    tooCloseToAnotherBlackhole = true;
 			}
 
-			if (!cancel)
+			if (!tooCloseToAnotherBlackhole)
             {
-			    radius = Mathf.Clamp(radius, 0.5f, 5f);
-
-			    blackHolePos.z = 0f;
-			    GameObject copy = Instantiate (blackhole, blackHolePos, Quaternion.identity) as GameObject;
-			    copy.transform.localScale = copy.transform.localScale * radius;
-			    copy.GetComponent<Rigidbody>().mass = radius * 10f;
-			    copy.GetComponent<Rigidbody>().drag = radius * 5f;
-			    copy.GetComponent<GravitionalPull>().range = radius + 5f;
+                placeHolderBlackHole.transform.position = new Vector3(
+                    placeHolderBlackHole.transform.position.x,
+                    placeHolderBlackHole.transform.position.y,
+                    0f // Keep on the default X-Y plane
+                );
+                GameObject copy = Instantiate(blackholePrefab, placeHolderBlackHole.transform.position, Quaternion.identity) as GameObject;
+			    copy.transform.localScale = defaultPlaceholderScale * placeholderRadius;
+			    copy.GetComponent<Rigidbody>().mass = placeholderRadius * 10f;
+			    copy.GetComponent<Rigidbody>().drag = placeholderRadius * 5f;
+                copy.GetComponent<GravitionalPull>().range = placeholderRadius + 5f;
+                copy.GetComponent<GravitionalPull>().active = true;
                 blackHoles.Add(copy);
 			}
-			radius = 0.5f;
-			cancel = false;
-		}
+            placeholderRadius = 0.5f;
+
+            Destroy(placeHolderBlackHole);
+            placeHolderBlackHole = null;
+        }
 	}
 }

@@ -3,34 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class GravitionalPull : MonoBehaviour {
+public class GravitionalPull : MonoBehaviour
+{
+    public bool active = false;
+
 	public float range;
 	GameManager gameManager;
 
-
 	Rigidbody self;
-
-	// Use this for initialization
-	void Start () {
-		self = GetComponent<Rigidbody> ();
-		gameManager = GameObject.Find ("MainCamera").GetComponent<GameManager> ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+    
+	void Start()
+    {
+		self = GetComponent<Rigidbody>();
+		gameManager = GameObject.Find("MainCamera").GetComponent<GameManager>();
 	}
 
-	void FixedUpdate()
+	void Update()
 	{
-		Collider[] cols = Physics.OverlapSphere (transform.position, range);
-		List<Rigidbody> rbs = new List<Rigidbody> ();
+        if (!active)
+            return;
 
-		foreach (Collider c in cols) {
+		Collider[] cols = Physics.OverlapSphere(transform.position, range);
+
+		foreach (Collider c in cols)
+        {
 			Rigidbody rb = c.attachedRigidbody;
-			if (rb != null && rb != self && !rbs.Contains(rb))
+			if (rb != null && rb != self && c.gameObject.name == GameManager.playerShip.name)
 			{
-				rbs.Add (rb);
 				Vector3 distance = gameObject.transform.position - c.transform.position;
 				rb.AddForce(distance / distance.sqrMagnitude * self.mass);
 			}
