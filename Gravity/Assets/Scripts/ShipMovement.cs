@@ -3,6 +3,7 @@ using System.Collections;
 
 public class ShipMovement : MonoBehaviour
 {
+    public Vector3 initialVelocity;
     public float mass;
     Vector3 acceleration = Vector3.zero;
     Vector3 velocity = Vector3.zero;
@@ -11,7 +12,8 @@ public class ShipMovement : MonoBehaviour
 	void Start()
     {
         //controller = GetComponent<CharacterController>();
-	}
+        GetComponent<Rigidbody>().velocity = initialVelocity;
+    }
 	
 	void Update()
     {
