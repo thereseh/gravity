@@ -20,7 +20,7 @@ public class GravitionalPull : MonoBehaviour
 
 	void Update()
 	{
-        if (!active)
+        if (!active || GameManager.transportingThroughWormhole)
             return;
 
 		Collider[] cols = Physics.OverlapSphere(transform.position, range);

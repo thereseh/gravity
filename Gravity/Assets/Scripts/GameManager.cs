@@ -18,16 +18,17 @@ public class GameManager : MonoBehaviour
 	public string level;
 	public string levelName;
 
-    public LayerMask placeholderMask;
-
     private float placeholderRadius = 0.5f;
 	private GameObject placeHolderBlackHole;
     private Vector3 defaultPlaceholderScale;
 
     static public bool SlowMo = false;
 
-	void Start()
+    static public bool transportingThroughWormhole = false;
+
+    void Start()
 	{
+        transportingThroughWormhole = false;
 		DebuggingMode = debuggingMode;
 		playerShip = GameObject.Find("PlayerShip");
 		SpawnPoint = playerShip.transform.position;
@@ -111,7 +112,7 @@ public class GameManager : MonoBehaviour
 			    copy.transform.localScale = defaultPlaceholderScale * placeholderRadius;
 			    copy.GetComponent<Rigidbody>().mass = placeholderRadius * 10f;
 			    copy.GetComponent<Rigidbody>().drag = placeholderRadius * 5f;
-                copy.GetComponent<GravitionalPull>().range = placeholderRadius + 5f;
+                copy.GetComponent<GravitionalPull>().range = placeholderRadius + 55f;
                 copy.GetComponent<GravitionalPull>().active = true;
                 blackHoles.Add(copy);
 			}

@@ -15,20 +15,23 @@ public class ShipMovement : MonoBehaviour
 	
 	void Update()
     {
-        // User input
-        float userInputMultiplier = 10f;
-        if (Input.GetKey(KeyCode.D))
-            ApplyForce(Vector3.right * userInputMultiplier);
-        if (Input.GetKey(KeyCode.A))
-            ApplyForce(-Vector3.right * userInputMultiplier);
-        if (Input.GetKey(KeyCode.W))
-            ApplyForce(Vector3.up * userInputMultiplier);
-        if (Input.GetKey(KeyCode.S))
-            ApplyForce(-Vector3.up * userInputMultiplier);
+        if (!GameManager.transportingThroughWormhole)
+        {
+            // User input
+            float userInputMultiplier = 10f;
+            if (Input.GetKey(KeyCode.D))
+                ApplyForce(Vector3.right * userInputMultiplier);
+            if (Input.GetKey(KeyCode.A))
+                ApplyForce(-Vector3.right * userInputMultiplier);
+            if (Input.GetKey(KeyCode.W))
+                ApplyForce(Vector3.up * userInputMultiplier);
+            if (Input.GetKey(KeyCode.S))
+                ApplyForce(-Vector3.up * userInputMultiplier);
 
-        // Adjust position
-        GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
-        acceleration = Vector3.zero;
+            // Adjust position
+            GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
+            acceleration = Vector3.zero;
+        }
 
         // Look in the direction of movement
         Vector3 v = GetComponent<Rigidbody>().velocity;
@@ -52,6 +55,10 @@ public class ShipMovement : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        print("Collided with " + col.gameObject.name);
+        if (!GameManager.transportingThroughWormhole)
+        {
+            print("Collided with " + col.gameObject.name);
+            PlayerHealth.TakeDamage(25f);
+        }
     }
 }

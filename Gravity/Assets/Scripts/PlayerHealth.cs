@@ -29,8 +29,8 @@ public class PlayerHealth : MonoBehaviour
 	{
 		dead = true;
 		health = 0f;
-		Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.Grayscale>().enabled = true;
-		Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>().enabled = true;
+		//Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.Grayscale>().enabled = true;
+		//Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>().enabled = true;
 		GameManager.SlowMo = true;
 		Invoke("Respawn", 3);
 	}
@@ -39,12 +39,12 @@ public class PlayerHealth : MonoBehaviour
 	{
 		dead = false;
 		health = 100f;
-		Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.Grayscale>().enabled = false;
-		Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>().enabled = false;
+		//Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.Grayscale>().enabled = false;
+		//Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>().enabled = false;
 		transform.position = GameManager.SpawnPoint;
 		GetComponent<ShipMovement>().acceleration = Vector3.zero;
         GetComponent<Rigidbody>().velocity = GetComponent<ShipMovement>().initialVelocity;
-		transform.GetChild(0).GetChild(0).Find("SmokingParticleSystem").GetComponent<ParticleSystem>().Stop();
+		transform.GetChild(0).Find("SmokingParticleSystem").GetComponent<ParticleSystem>().Stop();
 		TakeDamage(0f);
 		transform.GetChild(0).rotation = Quaternion.Euler(new Vector3(0, 180, 0));
 		GameManager.SlowMo = false;
