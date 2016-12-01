@@ -1,11 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class WormholeScript : MonoBehaviour
 {
     public float distToCollide = 2f;
-
     float enteredWormholeTime = 0f;
+    Image wormholeSinkUI;
+    bool showedWinText = false;
+
+    void Start()
+    {
+        wormholeSinkUI = GameObject.Find("Wormhole_Sink").GetComponent<Image>();
+    }
 
     void Update ()
     {
@@ -18,8 +25,29 @@ public class WormholeScript : MonoBehaviour
             GameManager.playerShip.GetComponent<Rigidbody>().velocity = diff.normalized * 10 * (diff.magnitude / distToCollide);
             GameManager.playerShip.transform.localScale *= 0.992f;
             Camera.main.fieldOfView += (1 - Camera.main.fieldOfView) * 0.025f;
+            Color c = wormholeSinkUI.color;
+            wormholeSinkUI.color = new Color(
+                c.r, c.g, c.b, c.a + 2f * Time.deltaTime
+            );
+            c = wormholeSinkUI.transform.Find("Wormhole_Sink_FadeOut").GetComponent<Image>().color;
+            wormholeSinkUI.transform.Find("Wormhole_Sink_FadeOut").GetComponent<Image>().color = new Color(
+                c.r, c.g, c.b, c.a + 0.5f * Time.deltaTime
+            );
 
-            if (Time.time - enteredWormholeTime >= 3f)
+            if (Time.time - enteredWormholeTime >= 1.5f)
+            {
+                if (!showedWinText)
+                {
+                    showedWinText = true;
+                    float timeSinceStart = Time.time - GameManager.timeStartedLevel;
+                    int minutes = Mathf.FloorToInt(timeSinceStart / 60f);
+                    int seconds = Mathf.FloorToInt(timeSinceStart - Mathf.FloorToInt(timeSinceStart / 60f) * 60);
+                    wormholeSinkUI.transform.Find("Wormhole_Sink_Text").GetComponent<Text>().text = "Finished Level " + GameObject.Find("MainCamera").GetComponent<GameManager>().level + ": " + GameObject.Find("MainCamera").GetComponent<GameManager>().levelName + @"
+    <size=32>Time: " + minutes.ToString() + " minutes " + seconds.ToString() + " seconds</size>";
+                }
+                ShowWinText();
+            }
+            if (Time.time - enteredWormholeTime >= 5f)
                 WinLevel();
         }
     }
@@ -34,8 +62,16 @@ public class WormholeScript : MonoBehaviour
         enteredWormholeTime = Time.time;
     }
 
+    void ShowWinText()
+    {
+        Color c = wormholeSinkUI.transform.Find("Wormhole_Sink_Text").GetComponent<Text>().color;
+        wormholeSinkUI.transform.Find("Wormhole_Sink_Text").GetComponent<Text>().color = new Color(
+            c.r, c.g, c.b, c.a + 0.5f * Time.deltaTime
+        );
+    }
+
     void WinLevel()
     {
-        print("Go to next level");
+        print("LOAD NEXT LEVEL (SCENE) - WormholeScript.cs");
     }
 }

@@ -26,8 +26,11 @@ public class GameManager : MonoBehaviour
 
     static public bool transportingThroughWormhole = false;
 
+    static public float timeStartedLevel = 0f;
+
     void Start()
 	{
+        timeStartedLevel = Time.time;
         transportingThroughWormhole = false;
 		DebuggingMode = debuggingMode;
 		playerShip = GameObject.Find("PlayerShip");
