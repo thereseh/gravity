@@ -6,39 +6,36 @@ using System.Collections.Generic;
 public class GravitionalPull : MonoBehaviour
 {
     public bool active = false;
-
-	public float range;
-	GameManager gameManager;
-
-	Rigidbody self;
     
-	void Start()
-    {
-		self = GetComponent<Rigidbody>();
-		gameManager = GameObject.Find("MainCamera").GetComponent<GameManager>();
-	}
+    GameManager gameManager;
+    public float grav_const = 0.08f;
+    public ShipMovement ship;
 
-	void Update()
-	{
+    Rigidbody self;
+
+    void Start()
+    {
+        self = GetComponent<Rigidbody>();
+        gameManager = GameObject.Find("MainCamera").GetComponent<GameManager>();
+        ship = GameObject.Find("PlayerShip").GetComponent<ShipMovement>();
+
+    }
+
+    void FixedUpdate()
+    {
         if (!active || GameManager.transportingThroughWormhole)
             return;
+        
+        Vector3 distance = gameObject.transform.position - GameManager.playerShip.transform.position;
+        float rad = gameObject.GetComponent<SphereCollider>().radius + gameObject.transform.localScale.x;
+        
+        float force = (grav_const * self.mass * 1) / distance.sqrMagnitude;
+        GameManager.playerShip.GetComponent<Rigidbody>().AddForce(distance.normalized * force, ForceMode.Impulse);
+    }
 
-		Collider[] cols = Physics.OverlapSphere(transform.position, range);
-
-		foreach (Collider c in cols)
-        {
-			Rigidbody rb = c.attachedRigidbody;
-			if (rb != null && rb != self && c.gameObject.name == GameManager.playerShip.name)
-			{
-				Vector3 distance = gameObject.transform.position - c.transform.position;
-				rb.AddForce(distance / distance.sqrMagnitude * self.mass);
-			}
-		}
-	}
-
-	void OnCollisionEnter(Collision obj)
-	{
-		/*if (obj.gameObject.tag == "Blackhole" && gameObject.tag != "PlaceHolder") {
+    void OnCollisionEnter(Collision obj)
+    {
+        /*if (obj.gameObject.tag == "Blackhole" && gameObject.tag != "PlaceHolder") {
 			float masses = self.mass + obj.gameObject.GetComponent<Rigidbody> ().mass;
 			Vector3 rad1 = gameObject.transform.localScale;
 			Vector3 rad2 = obj.transform.localScale;
@@ -54,18 +51,11 @@ public class GravitionalPull : MonoBehaviour
 			Destroy(obj.gameObject);
 			Destroy(gameObject);
 		} else {*/
-			self.isKinematic = true;
-	}
+        self.isKinematic = true;
+    }
 
-	void OnCollisionExit ()
-	{
-		self.isKinematic = false;
-	}
-	
-
-	void OnDrawGizmos()
-	{
-		Gizmos.color = Color.cyan;
-		Gizmos.DrawWireSphere(transform.position, range);
-	}
+    void OnCollisionExit()
+    {
+        self.isKinematic = false;
+    }
 }

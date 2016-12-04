@@ -6,12 +6,13 @@ public class LightAlarm : MonoBehaviour
 	public float maxIntensity;
 	public float offDamping;
 	public float switchDelay;
-	float lastSwitch;
-	bool enabled = true;
+    public bool lightOn = true;
+    public float initialDelay = 0f;
+    float lastSwitch;
 
 	void Start()
 	{
-		lastSwitch = Time.time;
+		lastSwitch = Time.time - initialDelay;
 	}
 
 	void Update()
@@ -19,10 +20,10 @@ public class LightAlarm : MonoBehaviour
 		if (Time.time - lastSwitch >= switchDelay)
 		{
 			lastSwitch = Time.time;
-			enabled = !enabled;
+            lightOn = !lightOn;
 		}
 
-		if (enabled)
+		if (lightOn)
 		{
 			GetComponent<Light>().intensity += (maxIntensity - GetComponent<Light>().intensity) * 0.1f;
 		}

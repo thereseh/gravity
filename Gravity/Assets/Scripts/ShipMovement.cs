@@ -7,13 +7,14 @@ public class ShipMovement : MonoBehaviour
     public float mass;
     [HideInInspector]
     public Vector3 acceleration = Vector3.zero;
+    Transform facingBlackHole;
 
-	void Start()
+    void Start()
     {
         GetComponent<Rigidbody>().velocity = initialVelocity;
     }
-	
-	void Update()
+
+    void Update()
     {
         if (!GameManager.transportingThroughWormhole)
         {
@@ -44,8 +45,17 @@ public class ShipMovement : MonoBehaviour
         if (v.magnitude == 0)
             rotationAngle = 0;
 
-        transform.GetChild(0).LookAt(transform.GetChild(0).position + Vector3.up);
-        transform.GetChild(0).RotateAround(transform.GetChild(0).position, -Vector3.forward, rotationAngle);
+        if (facingBlackHole != null)
+        {
+            transform.GetChild(0).LookAt(facingBlackHole.position);
+            transform.GetChild(0).RotateAround(transform.GetChild(0).position, -Vector3.forward, 270);
+            transform.GetChild(0).RotateAround(transform.GetChild(0).position, Vector3.right, 90);
+        }
+        else
+        {
+            transform.GetChild(0).LookAt(transform.GetChild(0).position + Vector3.up);
+            transform.GetChild(0).RotateAround(transform.GetChild(0).position, -Vector3.forward, rotationAngle);
+        }
     }
 
     void ApplyForce(Vector3 force)
@@ -55,10 +65,22 @@ public class ShipMovement : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (!GameManager.transportingThroughWormhole)
+        if (!GameManager.transportingThroughWormhole && col.gameObject.tag != "PlaceHolder" && col.gameObject.tag != "Blackhole")
         {
             print("Collided with " + col.gameObject.name);
             PlayerHealth.TakeDamage(25f);
+        }
+        else if (col.gameObject.tag == "Blackhole")
+        {
+            facingBlackHole = col.transform;
+        }
+    }
+
+    void OnCollisionExit(Collision col)
+    {
+        if (col.gameObject.tag == "Blackhole")
+        {
+            facingBlackHole = null;
         }
     }
 }

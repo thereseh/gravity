@@ -72,7 +72,18 @@ public class GameManager : MonoBehaviour
         // Increase size of new black hole while mouse button is held down
         else if (Input.GetMouseButton(0) && placeHolderBlackHole != null)
         {
-            placeholderRadius += 0.01f;
+            /*placeholderRadius += 0.01f;
+            placeholderRadius = Mathf.Clamp(placeholderRadius, 0.5f, 5f);
+            placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
+            */
+            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            {
+                placeholderRadius += 0.3f;
+            }
+            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            {
+                placeholderRadius -= 0.3f;
+            }
             placeholderRadius = Mathf.Clamp(placeholderRadius, 0.5f, 5f);
             placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
 
@@ -113,10 +124,10 @@ public class GameManager : MonoBehaviour
                 );
                 GameObject copy = Instantiate(blackholePrefab, placeHolderBlackHole.transform.position, Quaternion.identity) as GameObject;
 			    copy.transform.localScale = defaultPlaceholderScale * placeholderRadius;
-			    copy.GetComponent<Rigidbody>().mass = placeholderRadius * 10f;
-			    copy.GetComponent<Rigidbody>().drag = placeholderRadius * 5f;
-                copy.GetComponent<GravitionalPull>().range = placeholderRadius + 55f;
+			    copy.GetComponent<Rigidbody>().mass = placeholderRadius * 15f;
+			    copy.GetComponent<Rigidbody>().drag = 0f;
                 copy.GetComponent<GravitionalPull>().active = true;
+                copy.tag = "Blackhole";
                 blackHoles.Add(copy);
 			}
             placeholderRadius = 0.5f;

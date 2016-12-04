@@ -43,7 +43,7 @@ public class WormholeScript : MonoBehaviour
                     int minutes = Mathf.FloorToInt(timeSinceStart / 60f);
                     int seconds = Mathf.FloorToInt(timeSinceStart - Mathf.FloorToInt(timeSinceStart / 60f) * 60);
                     wormholeSinkUI.transform.Find("Wormhole_Sink_Text").GetComponent<Text>().text = "Finished Level " + GameObject.Find("MainCamera").GetComponent<GameManager>().level + ": " + GameObject.Find("MainCamera").GetComponent<GameManager>().levelName + @"
-    <size=32>Time: " + minutes.ToString() + " minutes " + seconds.ToString() + " seconds</size>";
+<size=22>Time: " + minutes.ToString() + " minutes " + seconds.ToString() + " seconds</size>";
                 }
                 ShowWinText();
             }
