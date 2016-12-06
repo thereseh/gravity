@@ -31,9 +31,16 @@ public class GravitionalPull : MonoBehaviour
         
         float force = (grav_const * self.mass * 1) / distance.sqrMagnitude;
         GameManager.playerShip.GetComponent<Rigidbody>().AddForce(distance.normalized * force, ForceMode.Impulse);
-    }
 
-    void OnCollisionEnter(Collision obj)
+		for (int i = 0; i < gameManager.asteroids.Count; i++) {
+			Vector3 dist = gameObject.transform.position - gameManager.asteroids[i].transform.position;
+			
+			float force2 = (grav_const * self.mass * 0.005f) / dist.sqrMagnitude;
+			gameManager.asteroids[i].GetComponent<Rigidbody>().AddForce(dist.normalized * (force / 10f), ForceMode.Impulse);
+		}
+	}
+	
+	void OnCollisionEnter(Collision obj)
     {
         /*if (obj.gameObject.tag == "Blackhole" && gameObject.tag != "PlaceHolder") {
 			float masses = self.mass + obj.gameObject.GetComponent<Rigidbody> ().mass;

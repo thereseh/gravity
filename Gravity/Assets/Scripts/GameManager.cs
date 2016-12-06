@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
 	static public GameObject playerShip;
     static public List<GameObject> blackHoles = new List<GameObject>();
+	public List<GameObject> asteroids;
 
     static public bool DebuggingMode = false;
     public bool debuggingMode = false;
