@@ -118,6 +118,18 @@ public class GameManager : MonoBehaviour
 
 			if (!tooCloseToAnotherBlackhole)
             {
+                // Remove black holes
+                List<GameObject> bhBu = new List<GameObject>();
+                foreach (GameObject blackHole in blackHoles)
+                    bhBu.Add(blackHole);
+                foreach (GameObject bh in bhBu)
+                {
+                    bh.SetActive(false);
+                    Destroy(bh);
+                    blackHoles.Remove(bh);
+                }
+
+                // Create new black hole
                 placeHolderBlackHole.transform.position = new Vector3(
                     placeHolderBlackHole.transform.position.x,
                     placeHolderBlackHole.transform.position.y,

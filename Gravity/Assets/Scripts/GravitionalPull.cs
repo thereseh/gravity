@@ -26,9 +26,9 @@ public class GravitionalPull : MonoBehaviour
         if (!active || GameManager.transportingThroughWormhole)
             return;
 
-        transform.localScale *= 0.99f;
-        self.mass *= 0.99f;
-        if (self.mass < 1f)
+        transform.localScale -= Vector3.one * 0.025f;
+        self.mass -= 0.5f;
+        if (transform.localScale.x < 0.1f)
         {
             gameObject.SetActive(false);
             Destroy(gameObject);
