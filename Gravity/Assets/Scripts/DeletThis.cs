@@ -6,8 +6,8 @@ public class DeletThis : MonoBehaviour
 {
     void OnMouseOver()
     {
-        // Right click on black hole to delete it
-        if (Input.GetMouseButtonDown(1))
+        // Right click or middle click on black hole to delete it
+        if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
         {
             gameObject.SetActive(false);
             Destroy(gameObject);
@@ -16,7 +16,7 @@ public class DeletThis : MonoBehaviour
     }
 
     // Get rid of deleted black holes
-    void clearListOfBlackHoles()
+    public void clearListOfBlackHoles()
     {
         List<GameObject> removeTheseFromList = new List<GameObject>();   
         foreach (GameObject blackHole in GameManager.blackHoles)

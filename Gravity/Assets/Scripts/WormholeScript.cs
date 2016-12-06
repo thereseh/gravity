@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
 
 public class WormholeScript : MonoBehaviour
 {
@@ -72,6 +74,19 @@ public class WormholeScript : MonoBehaviour
 
     void WinLevel()
     {
-        print("LOAD NEXT LEVEL (SCENE) - WormholeScript.cs");
+        // Reset variables
+        GameManager.SlowMo = false;
+        PlayerHealth.health = 100f;
+        PlayerHealth.TakeDamage(0f);
+
+        // Remove black holes
+        List<GameObject> bhBu = new List<GameObject>();
+        foreach (GameObject blackHole in GameManager.blackHoles)
+            bhBu.Add(blackHole);
+        foreach (GameObject bh in bhBu)
+            GameManager.blackHoles.Remove(bh);
+
+        // Load next level
+        SceneManager.LoadScene("level_" + (int.Parse(Camera.main.GetComponent<GameManager>().level) + 1));
     }
 }

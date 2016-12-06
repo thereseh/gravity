@@ -21,6 +21,21 @@ public class GravitionalPull : MonoBehaviour
 
     }
 
+    void Update()
+    {
+        if (!active || GameManager.transportingThroughWormhole)
+            return;
+
+        transform.localScale *= 0.99f;
+        self.mass *= 0.99f;
+        if (self.mass < 1f)
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+            GetComponent<DeletThis>().clearListOfBlackHoles();
+        }
+    }
+
     void FixedUpdate()
     {
         if (!active || GameManager.transportingThroughWormhole)

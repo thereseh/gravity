@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
 			    copy.GetComponent<Rigidbody>().mass = placeholderRadius * 15f;
 			    copy.GetComponent<Rigidbody>().drag = 0f;
                 copy.GetComponent<GravitionalPull>().active = true;
+                copy.GetComponent<SphereCollider>().isTrigger = false;
                 copy.tag = "Blackhole";
                 blackHoles.Add(copy);
 			}
