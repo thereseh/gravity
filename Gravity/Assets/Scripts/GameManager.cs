@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,7 +57,7 @@ public class GameManager : MonoBehaviour
 			Vector3 newBlackHolePos = Camera.main.ScreenToWorldPoint(new Vector3(
                 Input.mousePosition.x,
                 Input.mousePosition.y,
-                10.0f
+                15.0f
             ));
             newBlackHolePos = new Vector3(
                 newBlackHolePos.x,
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
             Vector3 newBlackHolePos = Camera.main.ScreenToWorldPoint(new Vector3(
                 Input.mousePosition.x,
                 Input.mousePosition.y,
-                10.0f
+                15.0f
             ));
             newBlackHolePos = new Vector3(
                 newBlackHolePos.x,
