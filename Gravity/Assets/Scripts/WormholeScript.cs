@@ -87,13 +87,9 @@ public class WormholeScript : MonoBehaviour
             GameManager.blackHoles.Remove(bh);
 
         // Load next level
-        try
-        {
-            SceneManager.LoadScene("level_" + (int.Parse(Camera.main.GetComponent<GameManager>().level) + 1));
-        }
-        catch
-        {
-            SceneManager.LoadScene("main_menu");
-        }
+        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
+            nextSceneIndex = 0; // Go to Main Menu
+        SceneManager.LoadScene(nextSceneIndex);
     }
 }

@@ -77,14 +77,14 @@ public class GameManager : MonoBehaviour
             placeholderRadius = Mathf.Clamp(placeholderRadius, 0.5f, 5f);
             placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
             */
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
+            /*if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
                 placeholderRadius += 0.3f;
             }
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
                 placeholderRadius -= 0.3f;
-            }
+            }*/
             placeholderRadius = Mathf.Clamp(placeholderRadius, 0.5f, 5f);
             placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
 

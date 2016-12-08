@@ -51,13 +51,17 @@ public class GravitionalPull : MonoBehaviour
         }
 
 		for (int i = 0; i < gameManager.asteroids.Count; i++) {
-			Vector3 dist = gameObject.transform.position - gameManager.asteroids[i].transform.position;
-
-            if (dist.magnitude > 0.5f)
+            try
             {
-                float force2 = (grav_const * self.mass * 2f) / dist.sqrMagnitude;
-                gameManager.asteroids[i].GetComponent<Rigidbody>().AddForce(dist.normalized * (force2 / 10f), ForceMode.Impulse);
+                Vector3 dist = gameObject.transform.position - gameManager.asteroids[i].transform.position;
+
+                if (dist.magnitude > 0.5f)
+                {
+                    float force2 = (grav_const * self.mass * 2f) / dist.sqrMagnitude;
+                    gameManager.asteroids[i].GetComponent<Rigidbody>().AddForce(dist.normalized * (force2 / 10f), ForceMode.Impulse);
+                }
             }
+            catch { }
 		}
 	}
 	
