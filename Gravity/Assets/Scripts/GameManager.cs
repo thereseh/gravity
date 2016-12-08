@@ -31,6 +31,10 @@ public class GameManager : MonoBehaviour
 
     static public bool overviewCam = false;
 
+    public float fuelPlaceAmount = 25f;
+    public float fuelIncreaseSpeed = 25f;
+    float fuel = 100f;
+
     void Start()
 	{
         timeStartedLevel = Time.time;
@@ -59,12 +63,18 @@ public class GameManager : MonoBehaviour
         }
         else
             PlaceBlackHoles();
+
+        // Update fuel display
+        fuel += fuelIncreaseSpeed * Time.deltaTime;
+        if (fuel > 100f)
+            fuel = 100f;
+        GameObject.Find("FuelForegroundMask").GetComponent<Image>().fillAmount = fuel / 100f;
     }
 
     void PlaceBlackHoles()
     {
         // Mouse button gets pressed, start making new black hole
-		if (Input.GetMouseButtonDown(0) && placeHolderBlackHole == null)
+		if (Input.GetMouseButtonDown(0) && placeHolderBlackHole == null && fuel >= fuelPlaceAmount)
         {
 			Vector3 newBlackHolePos = Camera.main.ScreenToWorldPoint(new Vector3(
                 Input.mousePosition.x,
@@ -160,6 +170,8 @@ public class GameManager : MonoBehaviour
 
             Destroy(placeHolderBlackHole);
             placeHolderBlackHole = null;
+
+            fuel -= fuelPlaceAmount;
         }
 
         else if (Input.GetMouseButtonDown(1))
