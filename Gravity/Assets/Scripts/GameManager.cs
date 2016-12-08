@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     static public float timeStartedLevel = 0f;
 
+    static public bool overviewCam = false;
+
     void Start()
 	{
         timeStartedLevel = Time.time;
@@ -46,7 +48,17 @@ public class GameManager : MonoBehaviour
         DebuggingMode = debuggingMode;
 
         // Placing new matter distortions
-        PlaceBlackHoles();
+        if (overviewCam)
+        {
+            if (placeHolderBlackHole != null)
+            {
+                placeholderRadius = 3f;
+                Destroy(placeHolderBlackHole);
+                placeHolderBlackHole = null;
+            }
+        }
+        else
+            PlaceBlackHoles();
     }
 
     void PlaceBlackHoles()

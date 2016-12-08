@@ -11,8 +11,14 @@ public class Follow : MonoBehaviour
 	void Update()
 	{
         if (Input.GetKey(KeyCode.Space))
+        {
+            GameManager.overviewCam = true;
             transform.Translate((overviewPosition - transform.position) * damping);
+        }
         else
-		    transform.Translate(((offset + followObject.position) - transform.position) * damping);
+        {
+            GameManager.overviewCam = false;
+            transform.Translate(((offset + followObject.position) - transform.position) * damping);
+        }
 	}
 }
