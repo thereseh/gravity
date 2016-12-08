@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
         {
             bool tooCloseToAnotherBlackhole = false;
 
-			for (int i = 0; i < blackHoles.Count; i++)
+			/*for (int i = 0; i < blackHoles.Count; i++)
 			{
 				Vector3 distance = blackHoles[i].transform.position - placeHolderBlackHole.transform.position;
 				float mag = distance.magnitude;
@@ -114,7 +114,7 @@ public class GameManager : MonoBehaviour
 				//print ("x + rad: " + (blackHoles[i].transform.localScale.x + radius));
 				if (mag <= (blackHoles[i].transform.localScale.x + placeholderRadius) / 2f)
                     tooCloseToAnotherBlackhole = true;
-			}
+			}*/
 
 			if (!tooCloseToAnotherBlackhole)
             {
@@ -140,7 +140,7 @@ public class GameManager : MonoBehaviour
 			    copy.GetComponent<Rigidbody>().mass = placeholderRadius * 15f;
 			    copy.GetComponent<Rigidbody>().drag = 0f;
                 copy.GetComponent<GravitionalPull>().active = true;
-                copy.GetComponent<SphereCollider>().isTrigger = false;
+                //copy.GetComponent<SphereCollider>().isTrigger = false;
                 copy.tag = "Blackhole";
                 blackHoles.Add(copy);
 			}
@@ -148,6 +148,20 @@ public class GameManager : MonoBehaviour
 
             Destroy(placeHolderBlackHole);
             placeHolderBlackHole = null;
+        }
+
+        else if (Input.GetMouseButtonDown(1))
+        {
+            // Remove black holes
+            List<GameObject> bhBu = new List<GameObject>();
+            foreach (GameObject blackHole in blackHoles)
+                bhBu.Add(blackHole);
+            foreach (GameObject bh in bhBu)
+            {
+                bh.SetActive(false);
+                Destroy(bh);
+                blackHoles.Remove(bh);
+            }
         }
 	}
 }

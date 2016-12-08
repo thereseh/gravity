@@ -5,6 +5,7 @@ public class ShipMovement : MonoBehaviour
 {
     public Vector3 initialVelocity;
     public float mass;
+    public float maxSpeed = 6f;
     [HideInInspector]
     public Vector3 acceleration = Vector3.zero;
     Transform facingBlackHole;
@@ -31,6 +32,8 @@ public class ShipMovement : MonoBehaviour
 
             // Adjust position
             GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
+            if (GetComponent<Rigidbody>().velocity.magnitude > maxSpeed)
+                GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity.normalized * maxSpeed;
             acceleration = Vector3.zero;
         }
 

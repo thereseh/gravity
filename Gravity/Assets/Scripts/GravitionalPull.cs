@@ -42,16 +42,22 @@ public class GravitionalPull : MonoBehaviour
             return;
         
         Vector3 distance = gameObject.transform.position - GameManager.playerShip.transform.position;
-        float rad = gameObject.GetComponent<SphereCollider>().radius + gameObject.transform.localScale.x;
-        
-        float force = (grav_const * self.mass * 1) / distance.sqrMagnitude;
-        GameManager.playerShip.GetComponent<Rigidbody>().AddForce(distance.normalized * force, ForceMode.Impulse);
+        if (distance.magnitude > 0.5f)
+        {
+            float rad = gameObject.GetComponent<SphereCollider>().radius + gameObject.transform.localScale.x;
+
+            float force = (grav_const * self.mass * 1) / distance.sqrMagnitude;
+            GameManager.playerShip.GetComponent<Rigidbody>().AddForce(distance.normalized * force, ForceMode.Impulse);
+        }
 
 		for (int i = 0; i < gameManager.asteroids.Count; i++) {
 			Vector3 dist = gameObject.transform.position - gameManager.asteroids[i].transform.position;
-			
-			float force2 = (grav_const * self.mass * 0.005f) / dist.sqrMagnitude;
-			gameManager.asteroids[i].GetComponent<Rigidbody>().AddForce(dist.normalized * (force / 10f), ForceMode.Impulse);
+
+            if (dist.magnitude > 0.5f)
+            {
+                float force2 = (grav_const * self.mass * 2f) / dist.sqrMagnitude;
+                gameManager.asteroids[i].GetComponent<Rigidbody>().AddForce(dist.normalized * (force2 / 10f), ForceMode.Impulse);
+            }
 		}
 	}
 	
