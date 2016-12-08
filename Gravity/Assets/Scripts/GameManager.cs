@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 	public string level;
 	public string levelName;
 
-    private float placeholderRadius = 0.5f;
+    private float placeholderRadius = 3f;
 	private GameObject placeHolderBlackHole;
     private Vector3 defaultPlaceholderScale;
 
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
                 copy.tag = "Blackhole";
                 blackHoles.Add(copy);
 			}
-            placeholderRadius = 0.5f;
+            placeholderRadius = 3f;
 
             Destroy(placeHolderBlackHole);
             placeHolderBlackHole = null;
