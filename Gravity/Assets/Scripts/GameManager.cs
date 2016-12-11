@@ -32,8 +32,8 @@ public class GameManager : MonoBehaviour
     static public bool overviewCam = false;
 
     public float fuelPlaceAmount = 25f;
-    public float fuelIncreaseSpeed = 25f;
-    float fuel = 100f;
+   // public float fuelIncreaseSpeed = 25f;
+    static public float fuel = 200f;
 
     void Start()
 	{
@@ -65,10 +65,12 @@ public class GameManager : MonoBehaviour
             PlaceBlackHoles();
 
         // Update fuel display
-        fuel += fuelIncreaseSpeed * Time.deltaTime;
-        if (fuel > 100f)
-            fuel = 100f;
-        GameObject.Find("FuelForegroundMask").GetComponent<Image>().fillAmount = fuel / 100f;
+			
+       // fuel += fuelIncreaseSpeed * Time.deltaTime;
+        if (fuel > 200f)
+            fuel = 200f;
+        GameObject.Find("FuelForegroundMask").GetComponent<Image>().fillAmount = fuel / 200f;
+				
     }
 
     void PlaceBlackHoles()

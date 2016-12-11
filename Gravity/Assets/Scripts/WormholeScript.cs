@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -78,6 +78,7 @@ public class WormholeScript : MonoBehaviour
         GameManager.SlowMo = false;
         PlayerHealth.health = 100f;
         PlayerHealth.TakeDamage(0f);
+			  GameManager.fuel = 200f;
 
         // Remove black holes
         List<GameObject> bhBu = new List<GameObject>();

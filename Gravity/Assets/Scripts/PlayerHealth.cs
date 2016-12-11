@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -39,6 +39,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		dead = false;
 		health = 100f;
+		GameManager.fuel = 200f;
 		//Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.Grayscale>().enabled = false;
 		//Camera.main.gameObject.GetComponent<UnityStandardAssets.ImageEffects.MotionBlur>().enabled = false;
 		transform.position = GameManager.SpawnPoint;

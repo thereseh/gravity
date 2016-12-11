@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour
@@ -9,6 +9,7 @@ public class ShipMovement : MonoBehaviour
     [HideInInspector]
     public Vector3 acceleration = Vector3.zero;
     Transform facingBlackHole;
+		 
 
     void Start()
     {
@@ -19,6 +20,8 @@ public class ShipMovement : MonoBehaviour
     {
         if (!GameManager.transportingThroughWormhole)
         {
+					if((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && GameManager.fuel > 0)
+					{
             // User input
             float userInputMultiplier = 10f;
             if (Input.GetKey(KeyCode.D))
@@ -29,6 +32,14 @@ public class ShipMovement : MonoBehaviour
                 ApplyForce(Vector3.up * userInputMultiplier);
             if (Input.GetKey(KeyCode.S))
                 ApplyForce(-Vector3.up * userInputMultiplier);
+						
+						GameManager.fuel = GameManager.fuel - Time.deltaTime * 100; // change this vaule to raise cost of using arrow keys
+						
+						if(GameManager.fuel < 0)
+						{
+							GameManager.fuel = 0;
+						}
+					}
 
             // Adjust position
             GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
