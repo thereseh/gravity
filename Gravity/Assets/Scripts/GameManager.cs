@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     static public bool overviewCam = false;
 
-    public float fuelPlaceAmount = 25f;
+    public float fuelPlaceAmount = 12.5f;
    // public float fuelIncreaseSpeed = 25f;
     static public float fuel = 200f;
 

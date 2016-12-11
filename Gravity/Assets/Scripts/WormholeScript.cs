@@ -10,6 +10,7 @@ public class WormholeScript : MonoBehaviour
     float enteredWormholeTime = 0f;
     Image wormholeSinkUI;
     bool showedWinText = false;
+	  
 
     void Start()
     {
