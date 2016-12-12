@@ -17,6 +17,13 @@ public class PlayerHealth : MonoBehaviour
 		// No more health
 		if (health <= 0 && !dead)
 			DestroyShip();
+		
+		//Out of fuel
+		if(GameManager.fuel <= 0f && !dead)
+		{
+			//Invoke("DestroyShip", 4);
+			DestroyShip();
+		}
 	}
 
 	static public void TakeDamage(float amount)

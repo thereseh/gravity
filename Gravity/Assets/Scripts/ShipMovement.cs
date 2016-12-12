@@ -9,11 +9,14 @@ public class ShipMovement : MonoBehaviour
     [HideInInspector]
     public Vector3 acceleration = Vector3.zero;
     Transform facingBlackHole;
+		public AudioSource thrustSound;
+		public AudioSource spurtSound;
 		 
 
     void Start()
     {
         GetComponent<Rigidbody>().velocity = initialVelocity;
+				//thrustSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -35,18 +38,44 @@ public class ShipMovement : MonoBehaviour
 						
 						GameManager.fuel = GameManager.fuel - Time.deltaTime * 100; // change this vaule to raise cost of using arrow keys
 						
+						if(!thrustSound.isPlaying && GameManager.fuel > 100f)
+						{
+							thrustSound.Play();
+						} 
+						
+						if(GameManager.fuel <= 100f && !spurtSound.isPlaying)
+							 {
+								 thrustSound.Stop();
+								 spurtSound.Play();
+							 }
+
+						
+						
 						if(GameManager.fuel < 0)
 						{
 							GameManager.fuel = 0;
 						}
+					} else 
+					{
+						thrustSound.Stop();
+						spurtSound.Stop();
 					}
+					
+					/*if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
+					{
+						thrustSound.Stop();
+					}  */
 
             // Adjust position
             GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
             if (GetComponent<Rigidbody>().velocity.magnitude > maxSpeed)
                 GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity.normalized * maxSpeed;
             acceleration = Vector3.zero;
-        }
+        } else
+				{
+					thrustSound.Stop();
+					spurtSound.Stop();
+				}
 
         // Look in the direction of movement
         Vector3 v = GetComponent<Rigidbody>().velocity;
