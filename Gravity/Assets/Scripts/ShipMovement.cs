@@ -108,7 +108,7 @@ public class ShipMovement : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if (!GameManager.transportingThroughWormhole && col.gameObject.tag != "PlaceHolder" && col.gameObject.tag != "Blackhole")
+		if (!GameManager.transportingThroughWormhole && col.gameObject.tag != "PlaceHolder" && col.gameObject.tag != "Blackhole" && col.gameObject.name != "station")
         {
             print("Collided with " + col.gameObject.name);
             PlayerHealth.TakeDamage(25f);
