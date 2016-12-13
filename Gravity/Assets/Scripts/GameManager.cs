@@ -148,9 +148,12 @@ public class GameManager : MonoBehaviour
                     bhBu.Add(blackHole);
                 foreach (GameObject bh in bhBu)
                 {
-                    bh.SetActive(false);
-                    Destroy(bh);
-                    blackHoles.Remove(bh);
+                    try
+                    {
+                        bh.SetActive(false);
+                        Destroy(bh);
+                        blackHoles.Remove(bh);
+                    } catch { }
                 }
 
                 // Create new black hole
