@@ -92,6 +92,7 @@ public class GameManager : MonoBehaviour
             placeHolderBlackHole = Instantiate(blackholePrefab, newBlackHolePos, Quaternion.identity) as GameObject;
             defaultPlaceholderScale = placeHolderBlackHole.transform.localScale;
             placeHolderBlackHole.transform.localScale = defaultPlaceholderScale * placeholderRadius;
+            placeHolderBlackHole.transform.GetChild(0).gameObject.SetActive(false);
         }
 
         // Increase size of new black hole while mouse button is held down
