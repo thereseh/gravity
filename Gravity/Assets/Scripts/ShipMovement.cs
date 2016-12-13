@@ -44,6 +44,7 @@ public class ShipMovement : MonoBehaviour
 						if(!thrustSound.isPlaying && GameManager.fuel > 100f)
 						{
 							thrustSound.Play();
+							alarmSound.Stop();
 						} 
 						
 						if(GameManager.fuel <= 100f)

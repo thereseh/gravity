@@ -4,8 +4,13 @@ using System.Collections;
 
 public class StartGame : MonoBehaviour
 {
+		public AudioSource click;
     public void StartTheGame()
     {
-        SceneManager.LoadScene("level_1");
+			
+			click.Play();
+				
+      SceneManager.LoadScene("level_1");
+				
     }
 }
