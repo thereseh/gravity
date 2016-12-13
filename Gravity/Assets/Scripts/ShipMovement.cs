@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class ShipMovement : MonoBehaviour
@@ -10,84 +11,81 @@ public class ShipMovement : MonoBehaviour
     public Vector3 acceleration = Vector3.zero;
     Transform facingBlackHole;
 		
-		public AudioSource thrustSound;
-		public AudioSource spurtSound;
-		public AudioSource crashSound;
-		public AudioSource alarmSound;
-		 
+	public AudioSource thrustSound;
+	public AudioSource spurtSound;
+	public AudioSource crashSound;
+	public AudioSource alarmSound;
+
+    Text lowFuelText;
 
     void Start()
     {
         GetComponent<Rigidbody>().velocity = initialVelocity;
-				//thrustSound = GetComponent<AudioSource>();
+        lowFuelText = GameObject.Find("UI_LowFuelText").GetComponent<Text>();
+        lowFuelText.enabled = false;
     }
 
     void Update()
     {
         if (!GameManager.transportingThroughWormhole)
         {
-					if((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && GameManager.fuel > 0)
-					{
-            // User input
-            float userInputMultiplier = 10f;
-            if (Input.GetKey(KeyCode.D))
-                ApplyForce(Vector3.right * userInputMultiplier);
-            if (Input.GetKey(KeyCode.A))
-                ApplyForce(-Vector3.right * userInputMultiplier);
-            if (Input.GetKey(KeyCode.W))
-                ApplyForce(Vector3.up * userInputMultiplier);
-            if (Input.GetKey(KeyCode.S))
-                ApplyForce(-Vector3.up * userInputMultiplier);
+	        if((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)) && GameManager.fuel > 0)
+		    {
+                // User input
+                float userInputMultiplier = 10f;
+                if (Input.GetKey(KeyCode.D))
+                    ApplyForce(Vector3.right * userInputMultiplier);
+                if (Input.GetKey(KeyCode.A))
+                    ApplyForce(-Vector3.right * userInputMultiplier);
+                if (Input.GetKey(KeyCode.W))
+                    ApplyForce(Vector3.up * userInputMultiplier);
+                if (Input.GetKey(KeyCode.S))
+                    ApplyForce(-Vector3.up * userInputMultiplier);
 						
-						GameManager.fuel = GameManager.fuel - Time.deltaTime * 100; // change this vaule to raise cost of using arrow keys
+				GameManager.fuel = GameManager.fuel - Time.deltaTime * 100; // change this value to raise cost of using arrow keys
 						
-						if(!thrustSound.isPlaying && GameManager.fuel > 100f)
-						{
-							thrustSound.Play();
-							alarmSound.Stop();
-						} 
-						
-						if(GameManager.fuel <= 100f)
-							 {
-								if(!spurtSound.isPlaying)
-								{
-								 	thrustSound.Stop();
-								 	spurtSound.Play();
-								}
-								if(!alarmSound.isPlaying)
-								{
-									alarmSound.Play();
-								}
-							 }
+				if(!thrustSound.isPlaying && GameManager.fuel > 100f)
+				{
+					thrustSound.Play();
+					alarmSound.Stop();
+                    lowFuelText.enabled = false;
+                }
 
+                if (GameManager.fuel <= 100f)
+                {
+                    lowFuelText.enabled = true;
+                    if (!spurtSound.isPlaying)
+				    {
+					    thrustSound.Stop();
+					    spurtSound.Play();
+				    }
+				    if(!alarmSound.isPlaying)
+				    {
+					    alarmSound.Play();
+                    }
+                }
 						
-						
-						if(GameManager.fuel < 0)
-						{
-							GameManager.fuel = 0;
-						}
-					} else 
-					{
-						thrustSound.Stop();
-						spurtSound.Stop();
-					}
-					
-					/*if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S))
-					{
-						thrustSound.Stop();
-					}  */
+				if(GameManager.fuel < 0)
+					GameManager.fuel = 0;
+			}
+            else 
+			{
+				thrustSound.Stop();
+				spurtSound.Stop();
+			}
 
             // Adjust position
             GetComponent<Rigidbody>().velocity += acceleration * Time.deltaTime;
             if (GetComponent<Rigidbody>().velocity.magnitude > maxSpeed)
                 GetComponent<Rigidbody>().velocity = GetComponent<Rigidbody>().velocity.normalized * maxSpeed;
             acceleration = Vector3.zero;
-        } else
-				{
-					thrustSound.Stop();
-					spurtSound.Stop();
-					alarmSound.Stop();
-				}
+        }
+        else
+		{
+			thrustSound.Stop();
+			spurtSound.Stop();
+			alarmSound.Stop();
+		}
 
         // Look in the direction of movement
         Vector3 v = GetComponent<Rigidbody>().velocity;
