@@ -9,8 +9,11 @@ public class ShipMovement : MonoBehaviour
     [HideInInspector]
     public Vector3 acceleration = Vector3.zero;
     Transform facingBlackHole;
+		
 		public AudioSource thrustSound;
 		public AudioSource spurtSound;
+		public AudioSource crashSound;
+		public AudioSource alarmSound;
 		 
 
     void Start()
@@ -43,10 +46,17 @@ public class ShipMovement : MonoBehaviour
 							thrustSound.Play();
 						} 
 						
-						if(GameManager.fuel <= 100f && !spurtSound.isPlaying)
+						if(GameManager.fuel <= 100f)
 							 {
-								 thrustSound.Stop();
-								 spurtSound.Play();
+								if(!spurtSound.isPlaying)
+								{
+								 	thrustSound.Stop();
+								 	spurtSound.Play();
+								}
+								if(!alarmSound.isPlaying)
+								{
+									alarmSound.Play();
+								}
 							 }
 
 						
@@ -75,6 +85,7 @@ public class ShipMovement : MonoBehaviour
 				{
 					thrustSound.Stop();
 					spurtSound.Stop();
+					alarmSound.Stop();
 				}
 
         // Look in the direction of movement
@@ -112,6 +123,7 @@ public class ShipMovement : MonoBehaviour
         {
             print("Collided with " + col.gameObject.name);
             PlayerHealth.TakeDamage(25f);
+						crashSound.Play();
         }
         else if (col.gameObject.tag == "Blackhole")
         {
